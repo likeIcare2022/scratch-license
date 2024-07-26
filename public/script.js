@@ -26,7 +26,7 @@ if (licenseButton) {
 
 if (adminButton) {
     adminButton.addEventListener('click', () => {
-        if (adminPanel) adminPanel.style.display = 'block';
+        if (adminPanel) adminPanel.style.display = 'block'; // Show the admin panel
     });
 }
 
@@ -121,39 +121,53 @@ if (licenseForm) {
             purchaseKey
         };
 
-        fetch('/add-license', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.text().then(text => {
-                    throw new Error(text);
-                });
-            }
-            return response.text();
-        })
-        .then(message => {
-            const linkDiv = document.getElementById('license-link');
-            if (linkDiv) {
-                linkDiv.innerHTML = `Put this in the credits of your project: <a href="${message}" target="_blank">${message}</a>`;
-            }
-        })
-        .catch(error => {
-            alert('Error: ' + error.message);
-        });
+        fetch('keys.json')
+            .then(response => response.json())
+            .then(keysData => {
+                if (keysData.keys.includes(purchaseKey)) {
+                    fetch('/add-license', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => response.text())
+                    .then(message => {
+                        const linkDiv = document.getElementById('license-link');
+                        if (linkDiv) {
+                            linkDiv.innerHTML = `Put this in the credits of your project: <a href="${message}" target="_blank">${message}</a>`;
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                } else {
+                    alert('Invalid purchase key.');
+                }
+            });
     });
 }
 
-// Add Key Form Submission
-const addKeyForm = document.getElementById('addKeyForm');
-if (addKeyForm) {
-    addKeyForm.addEventListener('submit', function(event) {
+// Admin Form Submission
+const adminForm = document.getElementById('adminForm');
+if (adminForm) {
+    adminForm.addEventListener('submit', function(event) {
         event.preventDefault();
+        const password = document.getElementById('adminPassword').value;
+        if (password === 'admin') {
+            const adminControls = document.getElementById('adminControls');
+            if (adminControls) {
+                adminControls.style.display = 'block'; // Show admin controls
+                alert('Admin controls are now visible.'); // Provide feedback
+            }
+        } else {
+            alert('Invalid password.');
+        }
+    });
+}
 
+// Add Key Button
+if (addKeyButton) {
+    addKeyButton.addEventListener('click', function() {
         const newKey = document.getElementById('newKey').value;
 
         fetch('/add-key', {
@@ -164,11 +178,7 @@ if (addKeyForm) {
             body: JSON.stringify({ newKey })
         })
         .then(response => response.text())
-        .then(message => {
-            alert(message);
-        })
-        .catch(error => {
-            alert('Error: ' + error.message);
-        });
+        .then(message => alert(message))
+        .catch(error => console.error('Error:', error));
     });
 }
