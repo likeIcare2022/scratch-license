@@ -1,10 +1,10 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require('uuid');  // Ensure uuid is installed
 
 const app = express();
-const PORT = process.env.PORT || 3000;  // Use environment variable for port
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
@@ -21,35 +21,37 @@ if (!fs.existsSync(licensesDir)) {
 // Route to add a new license
 app.post('/add-license', (req, res) => {
     const newLicense = req.body;
-    const licenseId = uuidv4();
+    const licenseId = uuidv4();  // Generate a unique ID for the license file
     const licenseFilePath = path.join(licensesDir, `${licenseId}.json`);
 
-    if (fs.existsSync(licenseFilePath)) {
-        return res.status(400).send('An unexpected error occurred');
-    }
-
+    // Default license data
     const licenseData = {
         ...newLicense,
         'Licensed-by': 'likeIcare2022_'
     };
 
+    // Write new license file
     fs.writeFile(licenseFilePath, JSON.stringify(licenseData, null, 2), (err) => {
         if (err) {
             return res.status(500).send('Error creating license file');
         }
 
+        // Remove the used key from keys.json
         fs.readFile('keys.json', (err, data) => {
             if (err) return res.status(500).send('Error reading keys file');
             let keys = JSON.parse(data);
 
+            // Check if the key exists and remove it
             if (keys.keys.includes(newLicense.purchaseKey)) {
                 keys.keys = keys.keys.filter(key => key !== newLicense.purchaseKey);
 
                 fs.writeFile('keys.json', JSON.stringify(keys, null, 2), (err) => {
                     if (err) return res.status(500).send('Error updating keys file');
 
+                    // Construct the URL to the license file
                     const licenseUrl = `https://scratch-license.vercel.app/licenses/${licenseId}`;
 
+                    // Set Content-Type to text/html and send the HTML response
                     res.setHeader('Content-Type', 'text/html');
                     res.send(`<p>License added successfully. View it at <a href="${licenseUrl}" target="_blank">${licenseUrl}</a></p>`);
                 });
