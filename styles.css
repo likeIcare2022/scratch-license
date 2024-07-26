@@ -1,0 +1,368 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    margin: 20px 0;
+}
+
+/* Form Styles */
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    max-width: 600px; /* Increased width for more space */
+    width: 100%;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input[type="text"], input[type="password"] {
+    width: calc(100% - 22px); /* Adjusted width for padding and border */
+    padding: 10px;
+    margin-bottom: 12px; /* Increased margin for better spacing */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px 20px; /* Increased padding for a more substantial button */
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px; /* Larger text for readability */
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Admin Panel */
+#adminPanel {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+    display: none; /* Hidden by default */
+    margin-top: 20px;
+}
+
+#adminPanel h2 {
+    margin-top: 0;
+}
+
+#adminForm {
+    margin-bottom: 20px;
+}
+
+#adminControls {
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    max-width: 600px;
+    width: 100%;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Modal Hidden */
+.hidden {
+    display: none;
+}
+
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    margin: 20px 0;
+}
+
+/* Form Styles */
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    max-width: 600px; /* Increased width for more space */
+    width: 100%;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input[type="text"], input[type="password"] {
+    width: calc(100% - 22px); /* Adjusted width for padding and border */
+    padding: 10px;
+    margin-bottom: 12px; /* Increased margin for better spacing */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px 20px; /* Increased padding for a more substantial button */
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px; /* Larger text for readability */
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Admin Panel */
+#adminPanel {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+    display: none; /* Hidden by default */
+    margin-top: 20px;
+}
+
+#adminPanel h2 {
+    margin-top: 0;
+}
+
+#adminForm {
+    margin-bottom: 20px;
+}
+
+#adminControls {
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    max-width: 600px;
+    width: 100%;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Modal Hidden */
+.hidden {
+    display: none;
+}
+
+
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    margin: 20px 0;
+}
+
+/* Form Styles */
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    max-width: 600px; /* Increased width for more space */
+    width: 100%;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input[type="text"], input[type="password"] {
+    width: calc(100% - 22px); /* Adjusted width for padding and border */
+    padding: 10px;
+    margin-bottom: 12px; /* Increased margin for better spacing */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px 20px; /* Increased padding for a more substantial button */
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px; /* Larger text for readability */
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Admin Panel */
+#adminPanel {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+    display: none; /* Hidden by default */
+    margin-top: 20px;
+}
+
+#adminPanel h2 {
+    margin-top: 0;
+}
+
+/* Admin Login Form Styles */
+#adminForm {
+    margin-bottom: 20px;
+    background: none; /* Remove background box */
+    border: none; /* Remove border */
+    box-shadow: none; /* Remove shadow */
+    padding: 0; /* Remove padding */
+}
+
+#adminPanel input[type="password"], #adminPanel button {
+    width: calc(100% - 22px); /* Adjusted width for padding and border */
+    margin-bottom: 12px; /* Increased margin for better spacing */
+}
+
+/* Admin Controls */
+#adminControls {
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Key Form Styles */
+#createKeyForm {
+    background: none; /* Remove background box */
+    border: none; /* Remove border */
+    box-shadow: none; /* Remove shadow */
+    padding: 0; /* Remove padding */
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    max-width: 600px;
+    width: 100%;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Modal Hidden */
+.hidden {
+    display: none;
+}
+
