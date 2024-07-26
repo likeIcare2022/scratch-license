@@ -1,3 +1,6 @@
+// Base URL for API requests
+const BASE_URL = window.location.origin; // Use the base URL of your hosted site
+
 // Get modal elements
 const licenseModal = document.getElementById('licenseModal');
 const adminPanel = document.getElementById('adminPanel');
@@ -32,7 +35,7 @@ if (adminButton) {
 
 if (viewKeysButton) {
     viewKeysButton.addEventListener('click', () => {
-        fetch('/get-keys')
+        fetch(`${BASE_URL}/get-keys`)
             .then(response => response.json())
             .then(data => {
                 const keysList = document.getElementById('keysList');
@@ -47,12 +50,12 @@ if (viewKeysButton) {
 
 if (viewLicensesButton) {
     viewLicensesButton.addEventListener('click', () => {
-        fetch('/get-licenses')
+        fetch(`${BASE_URL}/get-licenses`)
             .then(response => response.json())
             .then(data => {
                 const licensesList = document.getElementById('licensesList');
                 if (licensesList) {
-                    licensesList.innerHTML = data.licenses.map(license => `<li><a href="/licenses/${license}">${license}</a></li>`).join('');
+                    licensesList.innerHTML = data.licenses.map(license => `<li><a href="${BASE_URL}/licenses/${license}" target="_blank">${license}</a></li>`).join('');
                     if (licensesModal) licensesModal.style.display = 'block';
                 }
             })
@@ -125,7 +128,7 @@ if (licenseForm) {
             .then(response => response.json())
             .then(keysData => {
                 if (keysData.keys.includes(purchaseKey)) {
-                    fetch('/add-license', {
+                    fetch(`${BASE_URL}/add-license`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -169,7 +172,7 @@ if (addKeyButton) {
     addKeyButton.addEventListener('click', function() {
         const newKey = document.getElementById('newKey').value;
 
-        fetch('/add-key', {
+        fetch(`${BASE_URL}/add-key`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
