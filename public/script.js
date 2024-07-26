@@ -32,7 +32,7 @@ if (adminButton) {
 
 if (viewKeysButton) {
     viewKeysButton.addEventListener('click', () => {
-        fetch('/get-keys')
+        fetch('https://scratch-license.vercel.app/get-keys')
             .then(response => response.json())
             .then(data => {
                 const keysList = document.getElementById('keysList');
@@ -47,12 +47,12 @@ if (viewKeysButton) {
 
 if (viewLicensesButton) {
     viewLicensesButton.addEventListener('click', () => {
-        fetch('/get-licenses')
+        fetch('https://scratch-license.vercel.app/get-licenses')
             .then(response => response.json())
             .then(data => {
                 const licensesList = document.getElementById('licensesList');
                 if (licensesList) {
-                    licensesList.innerHTML = data.licenses.map(license => `<li><a href="/licenses/${license}">${license}</a></li>`).join('');
+                    licensesList.innerHTML = data.licenses.map(license => `<li><a href="https://scratch-license.vercel.app/licenses/${license}">${license}</a></li>`).join('');
                     if (licensesModal) licensesModal.style.display = 'block';
                 }
             })
@@ -121,11 +121,11 @@ if (licenseForm) {
             purchaseKey
         };
 
-        fetch('keys.json')
+        fetch('https://scratch-license.vercel.app/get-keys')
             .then(response => response.json())
             .then(keysData => {
                 if (keysData.keys.includes(purchaseKey)) {
-                    fetch('/add-license', {
+                    fetch('https://scratch-license.vercel.app/add-license', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -136,7 +136,7 @@ if (licenseForm) {
                     .then(message => {
                         const linkDiv = document.getElementById('license-link');
                         if (linkDiv) {
-                            linkDiv.innerHTML = `Put this in the credits of your project: <a href="${message}" target="_blank">${message}</a>`;
+                            linkDiv.innerHTML = `Put this in the credits of your project: <a href="${message.split(' ').pop()}" target="_blank">${message.split(' ').pop()}</a>`;
                         }
                     })
                     .catch(error => console.error('Error:', error));
@@ -157,7 +157,6 @@ if (adminForm) {
             const adminControls = document.getElementById('adminControls');
             if (adminControls) {
                 adminControls.style.display = 'block'; // Show admin controls
-                alert('Admin controls are now visible.'); // Provide feedback
             }
         } else {
             alert('Invalid password.');
@@ -170,7 +169,7 @@ if (addKeyButton) {
     addKeyButton.addEventListener('click', function() {
         const newKey = document.getElementById('newKey').value;
 
-        fetch('/add-key', {
+        fetch('https://scratch-license.vercel.app/add-key', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
