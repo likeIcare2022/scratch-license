@@ -1,6 +1,3 @@
-// Base URL for API requests
-const BASE_URL = window.location.origin; // Use the base URL of your hosted site
-
 // Get modal elements
 const licenseModal = document.getElementById('licenseModal');
 const adminPanel = document.getElementById('adminPanel');
@@ -29,13 +26,13 @@ if (licenseButton) {
 
 if (adminButton) {
     adminButton.addEventListener('click', () => {
-        if (adminPanel) adminPanel.style.display = 'block'; // Show the admin panel
+        if (adminPanel) adminPanel.style.display = 'block';
     });
 }
 
 if (viewKeysButton) {
     viewKeysButton.addEventListener('click', () => {
-        fetch(`${BASE_URL}/get-keys`)
+        fetch('/get-keys')
             .then(response => response.json())
             .then(data => {
                 const keysList = document.getElementById('keysList');
@@ -50,12 +47,12 @@ if (viewKeysButton) {
 
 if (viewLicensesButton) {
     viewLicensesButton.addEventListener('click', () => {
-        fetch(`${BASE_URL}/get-licenses`)
+        fetch('/get-licenses')
             .then(response => response.json())
             .then(data => {
                 const licensesList = document.getElementById('licensesList');
                 if (licensesList) {
-                    licensesList.innerHTML = data.licenses.map(license => `<li><a href="${BASE_URL}/licenses/${license}" target="_blank">${license}</a></li>`).join('');
+                    licensesList.innerHTML = data.licenses.map(license => `<li><a href="/licenses/${license}">${license}</a></li>`).join('');
                     if (licensesModal) licensesModal.style.display = 'block';
                 }
             })
@@ -124,55 +121,42 @@ if (licenseForm) {
             purchaseKey
         };
 
-        fetch('keys.json')
-            .then(response => response.json())
-            .then(keysData => {
-                if (keysData.keys.includes(purchaseKey)) {
-                    fetch(`${BASE_URL}/add-license`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    })
-                    .then(response => response.text())
-                    .then(message => {
-                        const linkDiv = document.getElementById('license-link');
-                        if (linkDiv) {
-                            linkDiv.innerHTML = `Put this in the credits of your project: <a href="${message.split(' ').pop()}" target="_blank">${message.split(' ').pop()}</a>`;
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-                } else {
-                    alert('Invalid purchase key.');
-                }
-            });
-    });
-}
-
-// Admin Form Submission
-const adminForm = document.getElementById('adminForm');
-if (adminForm) {
-    adminForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const password = document.getElementById('adminPassword').value;
-        if (password === 'admin') {
-            const adminControls = document.getElementById('adminControls');
-            if (adminControls) {
-                adminControls.style.display = 'block'; // Show admin controls
+        fetch('/add-license', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(text);
+                });
             }
-        } else {
-            alert('Invalid password.');
-        }
+            return response.text();
+        })
+        .then(message => {
+            const linkDiv = document.getElementById('license-link');
+            if (linkDiv) {
+                linkDiv.innerHTML = `Put this in the credits of your project: <a href="${message}" target="_blank">${message}</a>`;
+            }
+        })
+        .catch(error => {
+            alert('Error: ' + error.message);
+        });
     });
 }
 
-// Add Key Button
-if (addKeyButton) {
-    addKeyButton.addEventListener('click', function() {
+// Add Key Form Submission
+const addKeyForm = document.getElementById('addKeyForm');
+if (addKeyForm) {
+    addKeyForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
         const newKey = document.getElementById('newKey').value;
 
-        fetch(`${BASE_URL}/add-key`, {
+        fetch('/add-key', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -180,7 +164,11 @@ if (addKeyButton) {
             body: JSON.stringify({ newKey })
         })
         .then(response => response.text())
-        .then(message => alert(message))
-        .catch(error => console.error('Error:', error));
+        .then(message => {
+            alert(message);
+        })
+        .catch(error => {
+            alert('Error: ' + error.message);
+        });
     });
 }
