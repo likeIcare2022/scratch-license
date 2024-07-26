@@ -1,19 +1,14 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { v4: uuidv4 } = require('uuid');  // Ensure uuid is installed
+const { v4: uuidv4 } = require('uuid');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;  // Use environment variable for port
 
 // Middleware
 app.use(express.json());
-app.use(express.static('public'));  // Serve static files from 'public' directory
-
-// Serve the main HTML file
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+app.use(express.static(path.join(__dirname, 'public')));  // Serve static files from 'public' directory
 
 // Directory for licenses
 const licensesDir = path.join(__dirname, 'licenses');
@@ -26,7 +21,7 @@ if (!fs.existsSync(licensesDir)) {
 // Route to add a new license
 app.post('/add-license', (req, res) => {
     const newLicense = req.body;
-    const licenseId = uuidv4();  // Generate a unique ID for the license file
+    const licenseId = uuidv4();
     const licenseFilePath = path.join(licensesDir, `${licenseId}.json`);
 
     if (fs.existsSync(licenseFilePath)) {
@@ -53,8 +48,10 @@ app.post('/add-license', (req, res) => {
                 fs.writeFile('keys.json', JSON.stringify(keys, null, 2), (err) => {
                     if (err) return res.status(500).send('Error updating keys file');
 
-                    const licenseUrl = `https://scratch-license.onrender.com/licenses/${licenseId}`;
-                    res.send(licenseUrl);
+                    const licenseUrl = `https://scratch-license.vercel.app/licenses/${licenseId}`;
+
+                    res.setHeader('Content-Type', 'text/html');
+                    res.send(`<p>License added successfully. View it at <a href="${licenseUrl}" target="_blank">${licenseUrl}</a></p>`);
                 });
             } else {
                 res.status(400).send('Invalid or already used purchase key.');
