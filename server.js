@@ -4,11 +4,16 @@ const path = require('path');
 const { v4: uuidv4 } = require('uuid');  // Ensure uuid is installed
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
-app.use(express.static('.'));  // Serve static files
+app.use(express.static('public'));  // Serve static files from 'public' directory
+
+// Serve the main HTML file
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 // Directory for licenses
 const licensesDir = path.join(__dirname, 'licenses');
@@ -24,39 +29,31 @@ app.post('/add-license', (req, res) => {
     const licenseId = uuidv4();  // Generate a unique ID for the license file
     const licenseFilePath = path.join(licensesDir, `${licenseId}.json`);
 
-    // Check if file already exists (UUID should be unique, but a double-check won't hurt)
     if (fs.existsSync(licenseFilePath)) {
         return res.status(400).send('An unexpected error occurred');
     }
 
-    // Default license data
     const licenseData = {
         ...newLicense,
         'Licensed-by': 'likeIcare2022_'
     };
 
-    // Write new license file
     fs.writeFile(licenseFilePath, JSON.stringify(licenseData, null, 2), (err) => {
         if (err) {
             return res.status(500).send('Error creating license file');
         }
 
-        // Remove the used key from keys.json
         fs.readFile('keys.json', (err, data) => {
             if (err) return res.status(500).send('Error reading keys file');
             let keys = JSON.parse(data);
 
-            // Check if the key exists and remove it
             if (keys.keys.includes(newLicense.purchaseKey)) {
                 keys.keys = keys.keys.filter(key => key !== newLicense.purchaseKey);
 
                 fs.writeFile('keys.json', JSON.stringify(keys, null, 2), (err) => {
                     if (err) return res.status(500).send('Error updating keys file');
 
-                    // Construct the URL to the license file
                     const licenseUrl = `https://scratch-license.onrender.com/licenses/${licenseId}`;
-
-                    // Send the URL as a plain text response
                     res.send(licenseUrl);
                 });
             } else {
