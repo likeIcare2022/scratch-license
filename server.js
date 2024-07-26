@@ -1,14 +1,14 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require('uuid');  // Ensure uuid is installed
 
 const app = express();
-const PORT = process.env.PORT || 3000;  // Use environment variable for PORT
+const PORT = 3000;
 
 // Middleware
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));  // Serve static files from 'public' directory
+app.use(express.static('.'));  // Serve static files
 
 // Directory for licenses
 const licensesDir = path.join(__dirname, 'licenses');
@@ -42,7 +42,7 @@ app.post('/add-license', (req, res) => {
         }
 
         // Remove the used key from keys.json
-        fs.readFile(path.join(__dirname, 'keys.json'), (err, data) => {
+        fs.readFile('keys.json', (err, data) => {
             if (err) return res.status(500).send('Error reading keys file');
             let keys = JSON.parse(data);
 
@@ -50,15 +50,14 @@ app.post('/add-license', (req, res) => {
             if (keys.keys.includes(newLicense.purchaseKey)) {
                 keys.keys = keys.keys.filter(key => key !== newLicense.purchaseKey);
 
-                fs.writeFile(path.join(__dirname, 'keys.json'), JSON.stringify(keys, null, 2), (err) => {
+                fs.writeFile('keys.json', JSON.stringify(keys, null, 2), (err) => {
                     if (err) return res.status(500).send('Error updating keys file');
 
                     // Construct the URL to the license file
-                    const licenseUrl = `${req.protocol}://${req.get('host')}/licenses/${licenseId}`;
+                    const licenseUrl = `https://scratch-license.onrender.com/licenses/${licenseId}`;
 
-                    // Set Content-Type to text/html and send the HTML response
-                    res.setHeader('Content-Type', 'text/html');
-                    res.send(`<p>License added successfully. View it at <a href="${licenseUrl}" target="_blank">${licenseUrl}</a></p>`);
+                    // Send the URL as a plain text response
+                    res.send(licenseUrl);
                 });
             } else {
                 res.status(400).send('Invalid or already used purchase key.');
@@ -71,12 +70,12 @@ app.post('/add-license', (req, res) => {
 app.post('/add-key', (req, res) => {
     const newKey = req.body.newKey;
 
-    fs.readFile(path.join(__dirname, 'keys.json'), (err, data) => {
+    fs.readFile('keys.json', (err, data) => {
         if (err) return res.status(500).send('Error reading keys file');
         let keys = JSON.parse(data);
         keys.keys.push(newKey);
 
-        fs.writeFile(path.join(__dirname, 'keys.json'), JSON.stringify(keys, null, 2), (err) => {
+        fs.writeFile('keys.json', JSON.stringify(keys, null, 2), (err) => {
             if (err) return res.status(500).send('Error adding key');
             res.send('Key added successfully');
         });
@@ -85,7 +84,7 @@ app.post('/add-key', (req, res) => {
 
 // Route to get all keys
 app.get('/get-keys', (req, res) => {
-    fs.readFile(path.join(__dirname, 'keys.json'), (err, data) => {
+    fs.readFile('keys.json', (err, data) => {
         if (err) return res.status(500).send('Error reading keys file');
         res.json(JSON.parse(data));
     });
@@ -112,7 +111,6 @@ app.get('/licenses/:id', (req, res) => {
     });
 });
 
-// Start the server
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
